@@ -27,8 +27,8 @@ func Routes() *chi.Mux {
 		middleware.Recoverer,       // Recover from panics without crashing server
 	)
 
-	router.Route("/v1", func(r chi.Router) {
-		r.Mount("/api/blog", blog.Routes())
+	router.Route("/api/v1", func(r chi.Router) {
+		r.Mount("/blogs", blog.Routes())
 	})
 
 	return router
