@@ -45,6 +45,8 @@ func Initialize() {
 	CreateTable("articles")
 }
 
+/* ############ BLOG HELPER ############ */
+
 func CreateTable(tableName string) {
 	result, err := r.TableCreate(tableName).RunWrite(session)
 	if err != nil {
@@ -55,26 +57,36 @@ func CreateTable(tableName string) {
 }
 
 func InsertBlog(blog models.Blog) int {
-	// var data = map[string]interface{}{
-	// 	"Name":  "David Davidson",
-	// 	"Place": "Somewhere",
-	// }
-
-	// var resBlog models.Blog
 	result, err := r.Table("blogs").Insert(blog).RunWrite(session)
 	if err != nil {
 		fmt.Println(err)
 		return result.Created
 	}
 	return result.Created
-	// resBlog := res.
+}
 
-	// return result.GeneratedKeys[0]
+func UpdateBlog(id string, blog models.Blog) int {
+	result, err := r.Table("blogs").Get(id).Update(blog).RunWrite(session)
+	if err != nil {
+		fmt.Println(err)
+		return result.Updated
+	}
+	return result.Updated
+}
+
+func DeleteBlog(id string) {
+	result, err := r.Table("blogs").Get(id).Delete().Run(session)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	println(result)
+	return
 }
 
 func FetchAllBlogs() []models.Blog {
 	rows, err := r.Table("blogs").Run(session)
-	var blogs []models.Blog
+	blogs := []models.Blog{}
 	if err != nil {
 		fmt.Println(err)
 		return blogs
@@ -85,6 +97,47 @@ func FetchAllBlogs() []models.Blog {
 		fmt.Println(err2)
 		return blogs
 	}
-	println(len(blogs))
 	return blogs
+}
+
+func FetchOneBlog(id string) models.Blog {
+	cursor, err := r.Table("blogs").Get(id).Run(session)
+	var blog models.Blog
+	cursor.One(&blog)
+	if err != nil {
+		fmt.Println(err)
+		return blog
+	}
+
+	return blog
+}
+
+/* ############ ARTICLE HELPER ############ */
+
+func FetchAllArticles(blogId string) []models.Article {
+	rows, err := r.Table("articles").Run(session)
+	articles := []models.Article{}
+	if err != nil {
+		fmt.Println(err)
+		return articles
+	}
+
+	err2 := rows.All(&articles)
+	if err2 != nil {
+		fmt.Println(err2)
+		return articles
+	}
+	return articles
+}
+
+func FetchOneArticle(blogId string, id string) models.Article {
+	cursor, err := r.Table("articles").Filter(Field("id").eq(id), Field("blogId").eq(blogId)).Run(session)
+	var article models.Article
+	cursor.One(&article)
+	if err != nil {
+		fmt.Println(err)
+		return article
+	}
+
+	return article
 }

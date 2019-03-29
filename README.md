@@ -2,9 +2,14 @@
 
 ## Development
 
-Start your webdev server in auto refresh mode:
+Start your webdev server in auto refresh mode.
+Download air binary to your bin folder in the GO-Workspace.
 
-    gin -p 4000 run main.go
+[https://github.com/cosmtrek/air/releases](https://github.com/cosmtrek/air/releases)
+
+And execute...
+
+    air
 
 Start RethinkDB with Docker WebUI under [http://localhost:8080/#dashboard](http://localhost:8080/#dashboard):
 

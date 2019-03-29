@@ -37,8 +37,6 @@ func Routes() *chi.Mux {
 
 func main() {
 	database.Initialize()
-	// blah := database.Get("blogs", "id")
-	// println(blah)
 	router := Routes()
 
 	walkFunc := func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
