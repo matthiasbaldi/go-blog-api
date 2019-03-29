@@ -3,22 +3,21 @@ package blog
 import (
 	"net/http"
 
+	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
+	"github.com/matthiasbaldi/go-blog-api/features/database"
+	"github.com/matthiasbaldi/go-blog-api/models"
 )
 
 func GetAllBlogs(w http.ResponseWriter, r *http.Request) {
-	blogs := []Blog{
-		{
-			Slug:       "slug",
-			Title:      "Hello world",
-			Descrption: "Hello world from planet earth",
-		},
-	}
+	blogs := database.FetchAllBlogs()
 	render.JSON(w, r, blogs)
 }
 
 func GetBlog(w http.ResponseWriter, r *http.Request) {
-	blog := Blog{
+	id := chi.URLParam(r, "blogID")
+	blog := models.Blog{
+		ID:         id,
 		Slug:       "slug",
 		Title:      "Hello world",
 		Descrption: "Hello world from planet earth",
@@ -28,7 +27,10 @@ func GetBlog(w http.ResponseWriter, r *http.Request) {
 
 func CreateBlog(w http.ResponseWriter, r *http.Request) {
 	response := make(map[string]string)
+	var blog models.Blog
+	database.InsertBlog(r.Body)
 	response["message"] = "Created Blog successfully"
+	// response["created"] = database.InsertBlog(r.Body())
 	render.JSON(w, r, response)
 }
 

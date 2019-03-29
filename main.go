@@ -8,6 +8,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/render"
 	"github.com/matthiasbaldi/go-blog-api/features/blog"
+	"github.com/matthiasbaldi/go-blog-api/features/database"
 )
 
 // const (
@@ -35,6 +36,9 @@ func Routes() *chi.Mux {
 }
 
 func main() {
+	database.Initialize()
+	// blah := database.Get("blogs", "id")
+	// println(blah)
 	router := Routes()
 
 	walkFunc := func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
@@ -47,13 +51,3 @@ func main() {
 
 	log.Fatal(http.ListenAndServe(":4001", router))
 }
-
-// func main() {
-// 	item, err := communityindex.SearchByName("quarten")
-// 	if err != nil {
-// 		log.Fatal(err)
-// 	}
-
-// 	fmt.Println("You selected the community:")
-// 	fmt.Printf("%s: %s -> population: %s", item.Id, item.Name, item.Population.Total)
-// }

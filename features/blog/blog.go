@@ -4,25 +4,6 @@ import (
 	"github.com/go-chi/chi"
 )
 
-type Blog struct {
-	ID         string `json:"id"`
-	Slug       string `json:"slug"`
-	Title      string `json:"title"`
-	Descrption string `json:"description"`
-	CreateDate string `json:"created"`
-	UpdateDate string `json:"updated"`
-	Author     string `json:"author"`
-}
-
-type Article struct {
-	ID         string `json:"id"`
-	Title      string `json:"title"`
-	Content    string `json:"content"`
-	CreateDate string `json:"created"`
-	UpdateDate string `json:"updated"`
-	Author     string `json:"author"`
-}
-
 func Routes() *chi.Mux {
 	router := chi.NewRouter()
 	// blogs

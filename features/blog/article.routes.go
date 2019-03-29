@@ -3,11 +3,13 @@ package blog
 import (
 	"net/http"
 
+	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
+	"github.com/matthiasbaldi/go-blog-api/models"
 )
 
 func GetAllBlogArticles(w http.ResponseWriter, r *http.Request) {
-	articles := []Article{
+	articles := []models.Article{
 		{
 			Title:   "Hello world",
 			Content: "Hello world from planet earth",
@@ -17,7 +19,9 @@ func GetAllBlogArticles(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetBlogArticle(w http.ResponseWriter, r *http.Request) {
-	article := Article{
+	id := chi.URLParam(r, "id")
+	article := models.Article{
+		ID:      id,
 		Title:   "Hello world",
 		Content: "Hello world from planet earth",
 	}
