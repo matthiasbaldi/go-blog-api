@@ -9,7 +9,7 @@ Download air binary to your bin folder in the GO-Workspace.
 
 And execute...
 
-    air
+    air -c air.conf
 
 Start RethinkDB with Docker WebUI under [http://localhost:8080/#dashboard](http://localhost:8080/#dashboard):
 

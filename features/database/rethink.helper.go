@@ -66,7 +66,7 @@ func InsertBlog(blog models.Blog) int {
 }
 
 func UpdateBlog(id string, blog models.Blog) int {
-	result, err := r.Table("blogs").Get(id).Update(blog).RunWrite(session)
+	result, err := r.Table("blogs").Update(blog).RunWrite(session)
 	if err != nil {
 		fmt.Println(err)
 		return result.Updated
@@ -75,7 +75,7 @@ func UpdateBlog(id string, blog models.Blog) int {
 }
 
 func DeleteBlog(id string) {
-	result, err := r.Table("blogs").Get(id).Delete().Run(session)
+	result, err := r.Table("blogs").Delete().Run(session)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -114,6 +114,15 @@ func FetchOneBlog(id string) models.Blog {
 
 /* ############ ARTICLE HELPER ############ */
 
+func InsertArticle(article models.Article) int {
+	result, err := r.Table("articles").Insert(article).RunWrite(session)
+	if err != nil {
+		fmt.Println(err)
+		return result.Created
+	}
+	return result.Created
+}
+
 func FetchAllArticles(blogId string) []models.Article {
 	rows, err := r.Table("articles").Run(session)
 	articles := []models.Article{}
@@ -131,7 +140,10 @@ func FetchAllArticles(blogId string) []models.Article {
 }
 
 func FetchOneArticle(blogId string, id string) models.Article {
-	cursor, err := r.Table("articles").Filter(Field("id").eq(id), Field("blogId").eq(blogId)).Run(session)
+	cursor, err := r.Table("articles").Filter(func(row r.Term) interface{} {
+		return row.Field("id").Eq(id).And(row.Field("blogId").Eq(blogId))
+	}).Run(session)
+
 	var article models.Article
 	cursor.One(&article)
 	if err != nil {

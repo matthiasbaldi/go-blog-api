@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
+	"path/filepath"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -31,6 +33,13 @@ func Routes() *chi.Mux {
 	router.Route("/api/v1", func(r chi.Router) {
 		r.Mount("/blogs", blog.Routes())
 	})
+
+	workDir, _ := os.Getwd()
+	filesDir := filepath.Join(workDir, "static")
+	fs := http.StripPrefix("/", http.FileServer(http.Dir(filesDir)))
+	router.Get("/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fs.ServeHTTP(w, r)
+	}))
 
 	return router
 }

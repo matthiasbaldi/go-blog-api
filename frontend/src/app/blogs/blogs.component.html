@@ -1,0 +1,8 @@
+<h1>blogs works!</h1>
+
+<div>
+  <div *ngFor="let blog of blogs">
+    <h2 routerLink="/blog/{{blog.id}}/articles">{{blog.title}}</h2>
+    <p>{{blog.description}}</p>
+  </div>
+</div>

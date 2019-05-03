@@ -1,0 +1,8 @@
+<h1>blog: {{selectedBlog}}</h1>
+
+<div>
+  <div *ngFor="let article of articles">
+    <h2>{{article.title}}</h2>
+    <p>{{article.content}}</p>
+  </div>
+</div>
