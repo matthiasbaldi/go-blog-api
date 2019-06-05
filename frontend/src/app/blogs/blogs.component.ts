@@ -8,8 +8,11 @@ import { WebService } from '../services/web.service';
 })
 export class BlogsComponent implements OnInit {
   public blogs: [] = [];
+  public newBlog: any;
 
-  constructor(private webService: WebService) { }
+  constructor(private webService: WebService) {
+    this.setDefaults();
+  }
 
   ngOnInit() {
     this.loadBlogs();
@@ -19,6 +22,32 @@ export class BlogsComponent implements OnInit {
     this.webService.getBlogs().subscribe((data: []) => {
       this.blogs = data;
     });
+  }
+
+  public addBlog() {
+    this.newBlog.slug = this.newBlog.title.toUpperCase().substring(1, 4);
+    console.log(this.newBlog);
+    this.webService.createBlog(this.newBlog).subscribe((data: any) => {
+      this.setDefaults();
+      alert(data);
+      this.loadBlogs();
+    });
+  }
+
+  public removeBlog(id: string) {
+    this.webService.removeBlog(id).subscribe((data: any) => {
+      alert('successfully removed');
+      this.loadBlogs();
+    });
+  }
+
+  private setDefaults() {
+    this.newBlog = {
+      title: '',
+      description: '',
+      author: '',
+      slug: ''
+    };
   }
 
 }

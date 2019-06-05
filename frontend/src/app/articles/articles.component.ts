@@ -10,6 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 export class ArticlesComponent implements OnInit {
   public articles: [] = [];
   public selectedBlog: string;
+  public blog: null;
 
   constructor(private route: ActivatedRoute, private webService: WebService) {
     this.route.params.subscribe(params => {
@@ -19,6 +20,13 @@ export class ArticlesComponent implements OnInit {
 
   ngOnInit() {
     this.loadArticles(this.selectedBlog);
+    this.loadBlog(this.selectedBlog);
+  }
+
+  loadBlog(id: string) {
+    this.webService.getBlog(id).subscribe((data: any) => {
+      this.blog = data;
+    });
   }
 
   loadArticles(id: string) {
